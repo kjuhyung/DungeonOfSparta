@@ -16,30 +16,31 @@ namespace DungeonOfSparta
     // 아이템 목록 앞에 숫자가 표시
     // 장착 중이지 않다면 장착하고 [E] 표시 추가
     // 장착 중이라면 [E] 표시 없애기
-    
+
     public class Program
     {
         private static Character player;
         private static List<WorldItems> worldItems;
         private static List<MyItems> myItems;
+
         public class Character
         {
             // 캐릭터 클래스, 필드 선언, 자동 프로퍼티
             public string Name { get; }
-            public string Job { get;}
+            public string Job { get; }
             public int Level { get; }
             public int Atk { get; }
             public int Def { get; }
             public int Hp { get; }
             public int Gold { get; }
             public Character // 생성자 정의
-            (string name, string job,int level,int atk,int def, int hp, int gold)
+            (string name, string job, int level, int atk, int def, int hp, int gold)
             {
                 // 생성자를 통해 필드 값 초기화
                 Name = name;
                 Job = job;
                 Level = level;
-                Atk = atk; 
+                Atk = atk;
                 Def = def;
                 Hp = hp;
                 Gold = gold;
@@ -48,13 +49,13 @@ namespace DungeonOfSparta
         public class WorldItems
         {
             // 아이템 클래스 만들기
-            public string Name { get; }       
+            public string Name { get; }
             public string Type { get; }
             public string Info { get; }
             public int Price { get; }
             public int Atk { get; }
-            public int Def{ get; }
-            
+            public int Def { get; }
+
             public WorldItems
             (string name, string type, string info, int price, int atk, int def)
             {
@@ -83,17 +84,17 @@ namespace DungeonOfSparta
 
             public bool Equipped { get; set; }
 
-            public MyItems(WorldItems item) : base(item.Name,item.Type,item.Info,item.Price,item.Atk,item.Def)
+            public MyItems(WorldItems item) : base(item.Name, item.Type, item.Info, item.Price, item.Atk, item.Def)
             {
                 Equipped = false;
             }
-            
+
         }
 
         static void PlayerSetting()
         {
             // 캐릭터 정보 세팅
-            player = new Character("Leonidas","전사",1,10,5,100,1500);
+            player = new Character("Leonidas", "전사", 1, 10, 5, 100, 1500);
             // 아이템 정보 세팅
             myItems = new List<MyItems>();
             myItems.Add(new MyItems(worldItems[0]));
@@ -110,7 +111,7 @@ namespace DungeonOfSparta
             Console.ResetColor();
             Console.WriteLine();
             Console.WriteLine(" 스파르타 마을에 오신 여러분 환영합니다! ");
-            Console.WriteLine(" 마을에서 할 수 있는 활동입니다. ");           
+            Console.WriteLine(" 마을에서 할 수 있는 활동입니다. ");
             Console.WriteLine();
             Console.WriteLine(" 1. 상태 보기 ");
             Console.WriteLine(" 2. 가방 보기 ");
@@ -128,14 +129,14 @@ namespace DungeonOfSparta
                 case 2:
                     // 인벤토리 보기
                     DisplayInventory();
-                    break;                    
+                    break;
             }
         }
-        
+
         static void DisplayMyInfo()
         {
             // 캐릭터 클래스의 정보를 가져오기
-            Console.Clear();            
+            Console.Clear();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(" ~ 상태 ~ ");
@@ -168,7 +169,7 @@ namespace DungeonOfSparta
             Console.Clear();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine(" ~ 가방 ~ ");            
+            Console.WriteLine(" ~ 가방 ~ ");
             Console.ResetColor();
             Console.WriteLine();
             Console.WriteLine(" 보유 중인 아이템을 관리할 수 있습니다. ");
@@ -184,7 +185,7 @@ namespace DungeonOfSparta
             Console.WriteLine(" ~ 방어구 ~ ");
             Console.WriteLine();
             ItemsByType(myItems, "방어구");
-            Console.WriteLine();     
+            Console.WriteLine();
             Console.WriteLine(" 1. 장착 관리 ");
             Console.WriteLine(" 0. 나가기 ");
             Console.WriteLine();
@@ -202,7 +203,7 @@ namespace DungeonOfSparta
             }
         }
         static void DisplayEquipment()
-        { 
+        {
             // 장착 관리 창
             Console.Clear();
             Console.WriteLine();
@@ -210,6 +211,21 @@ namespace DungeonOfSparta
             Console.WriteLine(" ~ 장착 관리 ~ ");
             Console.ResetColor();
             Console.WriteLine();
+            Console.WriteLine(" 장착을 원하는 장비의 번호를 입력하세요 ");
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine(" [아이템 목록] ");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine(" ~ 무기 ~ ");
+            Console.WriteLine();
+            ItemsByType(myItems, "무기");
+            Console.WriteLine();
+            Console.WriteLine(" ~ 방어구 ~ ");
+            Console.WriteLine();
+            ItemsByType(myItems, "방어구");
+            Console.WriteLine();
+            // 번호 선택 
             Console.WriteLine(" 0. 나가기 ");
             Console.WriteLine();
 
@@ -217,21 +233,25 @@ namespace DungeonOfSparta
             int input = CheckUserInput(0, myItems.Count);
             if (input == 0)
             {
-                DisplayInventory(); 
+                DisplayInventory();
             }
         }
-
+        
         static void ItemsByType(List<MyItems> itemlist, string itemType)
         {
             foreach(MyItems item in itemlist)
-            {
+            {                
                 if (item.Type == itemType)
                 {
-                    Console.WriteLine($" {item.Name} / {item.Type} / {item.Info} / {item.Price}G ");
+                    if (itemType == "무기")
+                    Console.WriteLine($" {item.Name} / {item.Type} / 공격력 : {item.Atk}/ {item.Info} / {item.Price}G ");
+                    else if (itemType == "방어구")
+                    Console.WriteLine($" {item.Name} / {item.Type} / 방어력 : {item.Def}/ {item.Info} / {item.Price}G ");
                 }
             }
         }
         
+
         // 입력을 받아서 정수(int) 범위 체크하기
         // 올바른 범위 내의 값이 입력되어야 실행
         static int CheckUserInput(int min,int max)
