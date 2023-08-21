@@ -86,8 +86,12 @@ namespace DungeonOfSparta
         {
             Console.Clear();
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(" ! ~ Dungeon Of Sparta ~ ! ");
+            Console.ResetColor();
+            Console.WriteLine();
             Console.WriteLine(" 스파르타 마을에 오신 여러분 환영합니다! ");
-            Console.WriteLine(" 마을에서 할 수 있는 활동입니다. ");
+            Console.WriteLine(" 마을에서 할 수 있는 활동입니다. ");           
             Console.WriteLine();
             Console.WriteLine(" 1. 상태 보기 ");
             Console.WriteLine(" 2. 가방 보기 ");
@@ -114,12 +118,15 @@ namespace DungeonOfSparta
             // 캐릭터 클래스의 정보를 가져오기
             Console.Clear();            
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(" ~ 상태 ~ ");
+            Console.ResetColor();
+            Console.WriteLine();
             Console.WriteLine(" 캐릭터의 정보를 표시합니다. ");
             Console.WriteLine();
             Console.WriteLine($" 이름 : {player.Name} ");
             Console.WriteLine($" 직업 : {player.Job} ");
-            Console.WriteLine($" Lv : {player.Level} ");
+            Console.WriteLine($" 레벨 : {player.Level} ");
             Console.WriteLine($" 공격력 : {player.Atk} ");
             Console.WriteLine($" 방어력 : {player.Def} ");
             Console.WriteLine($" 돈 : {player.Gold}G ");
@@ -144,7 +151,9 @@ namespace DungeonOfSparta
             myItems.Add(items[3]);
             Console.Clear();
             Console.WriteLine();
-            Console.WriteLine(" ~ 가방 ~ ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(" ~ 가방 ~ ");            
+            Console.ResetColor ();
             Console.WriteLine();
             Console.WriteLine(" 보유 중인 아이템을 관리할 수 있습니다. ");
             Console.WriteLine();
@@ -163,6 +172,24 @@ namespace DungeonOfSparta
             Console.WriteLine();
             Console.WriteLine(" 원하시는 행동을 입력해주세요! ");
 
+            int input = CheckUserInput(0, 1);
+            switch (input)
+            {
+                case 0:
+                    DisplayGameStart();
+                    break;
+                case 1:
+                    DisplayEquipment();
+                    break;
+            }
+        }
+        static void DisplayEquipment()
+        { // 장착 관리 창
+            Console.Clear();
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(" ~ 장착 관리 ~ ");
+            Console.ResetColor();
         }
 
         static void ItemsByType(List<Items> itemlist, string itemType)
@@ -175,10 +202,7 @@ namespace DungeonOfSparta
                 }
             }
         }
-        static void DisplayEquipment()
-        {
-            // 장비창 만들기
-        }
+        
         // 입력을 받아서 정수(int) 범위 체크하기
         // 올바른 범위 내의 값이 입력되어야 실행
         static int CheckUserInput(int min,int max)
