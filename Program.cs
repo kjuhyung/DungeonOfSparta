@@ -82,12 +82,12 @@ namespace DungeonOfSparta
             // 보유하거나 장착하고 있으면 MyItems
 
             public bool Equipped { get; set; }
-            public MyItems(string name, string type, string info, int price, int atk, int def)
-        : base(name, type, info, price, atk, def)
+
+            public MyItems(WorldItems item) : base(item.Name,item.Type,item.Info,item.Price,item.Atk,item.Def)
             {
                 Equipped = false;
             }
-
+            
         }
 
         static void PlayerSetting()
@@ -96,8 +96,8 @@ namespace DungeonOfSparta
             player = new Character("Leonidas","전사",1,10,5,100,1500);
             // 아이템 정보 세팅
             myItems = new List<MyItems>();
-            myItems.Add(new MyItems("천 갑옷", "방어구", " 급소부위만 두텁게 한 수준으로 효과는 미미 ", 500, 0, 3));
-            myItems.Add(new MyItems("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0));
+            myItems.Add(new MyItems(worldItems[0]));
+            myItems.Add(new MyItems(worldItems[3]));
 
         }
 
