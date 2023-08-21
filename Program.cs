@@ -223,11 +223,11 @@ namespace DungeonOfSparta
             Console.WriteLine();
             Console.WriteLine(" ~ 무기 ~ ");
             Console.WriteLine();
-            ItemEquip(myItems, "무기");
+            ItemsByType(myItems, "무기");
             Console.WriteLine();
             Console.WriteLine(" ~ 방어구 ~ ");
             Console.WriteLine();
-            ItemEquip(myItems, "방어구");
+            ItemsByType(myItems, "방어구");
             Console.WriteLine();
             // 번호 선택 
             Console.WriteLine(" 0. 나가기 ");
@@ -239,28 +239,11 @@ namespace DungeonOfSparta
             {
                 DisplayInventory();
             }
-            else
+            else 
             {
-                MyItems selectedItem = myItems[input - 1];
-                selectedItem.Equipped = !selectedItem.Equipped; // 장착/해제 토글
-                DisplayEquipment();
+
             }
-        }
-        static void ItemEquip(List<MyItems> itemlist, string itemType)
-        {
-            for (int i = 0; i < itemlist.Count; i++)
-            {
-                MyItems item = itemlist[i];
-                if (item.Type == itemType)
-                {
-                    string equipMark = item.Equipped ? "[E] " : "    ";
-                    if (itemType == "무기")
-                        Console.WriteLine($" {i + 1}. {equipMark}{item.Name} / {item.Type} / 공격력 : {item.Atk}/ {item.Info} / {item.Price}G ");
-                    else if (itemType == "방어구")
-                        Console.WriteLine($" {i + 1}. {equipMark}{item.Name} / {item.Type} / 방어력 : {item.Def}/ {item.Info} / {item.Price}G ");
-                }
-            }
-        }
+        }        
         static void ItemsByType(List<MyItems> itemlist, string itemType)
         {
             foreach(MyItems item in itemlist)
