@@ -20,6 +20,7 @@ namespace DungeonOfSparta
     internal class Program
     {
         private static Character player;
+        
         public class Character
         {
             // 캐릭터 클래스, 필드 선언, 자동 프로퍼티
@@ -43,14 +44,41 @@ namespace DungeonOfSparta
                 Gold = gold;
             }
         }
+        public class Item
+        {
+            // 아이템 클래스 만들기
+            public string Name { get; }       
+            public string Type { get; }
+            public string Info { get; }
+            public int Price { get; }
+            public int Atk { get; }
+            public int Def{ get; }
+            
+            public Item
+            (string name, string type, string info, int price, int atk, int def)
+            {
+                Name = name;
+                Type = type;
+                Info = info;
+                Price = price;
+                Atk = atk;
+                Def = def;
+            }
+        }
         static void GameDataSetting()
         {
             // 캐릭터 정보 세팅
             player = new Character("Leonidas","전사",1,10,5,100,1500);
-            
+
 
             // 아이템 정보 세팅
-
+            List<Item> items = new List<Item>();
+            items.Add(new Item("천 갑옷", "갑옷", " 급소부위만 두텁게 한 수준으로 효과는 미미 ", 500, 0, 3));
+            items.Add(new Item("가죽 갑옷", "갑옷", " 가볍지만 유연한 방어를 제공 ", 1000, 0, 5));
+            items.Add(new Item("사슬 갑옷", "갑옷", " 기동성과 효과를 적절히 갖춘 보편적인 장비 ", 1500, 0, 10));
+            items.Add(new Item("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0));
+            items.Add(new Item("돌 검", "무기", " 단순하지만 위력적 ", 1000, 5, 0));
+            items.Add(new Item("철 검", "무기", " 충분한 공격력을 갖춘 보편적인 장비 ", 1500, 10, 0));
         }
 
         static void DisplayGameStart()
@@ -82,8 +110,9 @@ namespace DungeonOfSparta
         
         static void DisplayMyInfo()
         {
-            Console.Clear();
             // 캐릭터 클래스의 정보를 가져오기
+            Console.Clear();            
+            Console.WriteLine();
             Console.WriteLine(" ~ 상태창 ~ ");
             Console.WriteLine(" 캐릭터의 정보를 표시합니다. ");
             Console.WriteLine();
@@ -107,6 +136,7 @@ namespace DungeonOfSparta
         }
         static void DisplayInventory()
         {
+            // 인벤토리 창 만들기
 
         }
 
