@@ -44,7 +44,7 @@ namespace DungeonOfSparta
                 Gold = gold;
             }
         }
-        public class Item
+        public class Items
         {
             // 아이템 클래스 만들기
             public string Name { get; }       
@@ -54,7 +54,7 @@ namespace DungeonOfSparta
             public int Atk { get; }
             public int Def{ get; }
             
-            public Item
+            public Items
             (string name, string type, string info, int price, int atk, int def)
             {
                 Name = name;
@@ -72,13 +72,13 @@ namespace DungeonOfSparta
 
 
             // 아이템 정보 세팅
-            List<Item> items = new List<Item>();
-            items.Add(new Item("천 갑옷", "갑옷", " 급소부위만 두텁게 한 수준으로 효과는 미미 ", 500, 0, 3));
-            items.Add(new Item("가죽 갑옷", "갑옷", " 가볍지만 유연한 방어를 제공 ", 1000, 0, 5));
-            items.Add(new Item("사슬 갑옷", "갑옷", " 기동성과 효과를 적절히 갖춘 보편적인 장비 ", 1500, 0, 10));
-            items.Add(new Item("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0));
-            items.Add(new Item("돌 검", "무기", " 단순하지만 위력적 ", 1000, 5, 0));
-            items.Add(new Item("철 검", "무기", " 충분한 공격력을 갖춘 보편적인 장비 ", 1500, 10, 0));
+            List<Items> items = new List<Items>();
+            items.Add(new Items("천 갑옷", "갑옷", " 급소부위만 두텁게 한 수준으로 효과는 미미 ", 500, 0, 3));
+            items.Add(new Items("가죽 갑옷", "갑옷", " 가볍지만 유연한 방어를 제공 ", 1000, 0, 5));
+            items.Add(new Items("사슬 갑옷", "갑옷", " 기동성과 효과를 적절히 갖춘 보편적인 장비 ", 1500, 0, 10));
+            items.Add(new Items("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0));
+            items.Add(new Items("돌 검", "무기", " 단순하지만 위력적 ", 1000, 5, 0));
+            items.Add(new Items("철 검", "무기", " 충분한 공격력을 갖춘 보편적인 장비 ", 1500, 10, 0));
         }
 
         static void DisplayGameStart()
