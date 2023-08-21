@@ -52,11 +52,93 @@ namespace DungeonOfSparta
             // 아이템 정보 세팅
 
         }
-       
+
+        static void DisplayGameStart()
+        {
+            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine(" 스파르타 마을에 오신 여러분 환영합니다! ");
+            Console.WriteLine(" 마을에서 할 수 있는 활동입니다. ");
+            Console.WriteLine();
+            Console.WriteLine(" 1. 상태창 보기 ");
+            Console.WriteLine(" 2. 인벤토리 보기 ");
+            Console.WriteLine();
+            Console.WriteLine(" 원하시는 행동을 입력해주세요! ");
+
+            // 입력 받아오기
+            int input = CheckUserInput(1, 2);
+            switch (input)
+            {
+                case 1:
+                    // 상태창 보기
+                    DisplayMyInfo();
+                    break;
+                case 2:
+                    // 인벤토리 보기
+                    DisplayInventory();
+                    break;                    
+            }
+        }
         
+        static void DisplayMyInfo()
+        {
+            Console.Clear();
+            // 캐릭터 클래스의 정보를 가져오기
+            Console.WriteLine(" ~ 상태창 ~ ");
+            Console.WriteLine(" 캐릭터의 정보를 표시합니다. ");
+            Console.WriteLine();
+            Console.WriteLine($" 이름 : {player.Name} ");
+            Console.WriteLine($" 직업 : {player.Job} ");
+            Console.WriteLine($" Lv : {player.Level} ");
+            Console.WriteLine($" 공격력 : {player.Atk} ");
+            Console.WriteLine($" 방어력 : {player.Def} ");
+            Console.WriteLine($" 돈 : {player.Gold}G ");
+            Console.WriteLine();
+            Console.WriteLine(" 0. 나가기 ");
+
+            int input = CheckUserInput(0, 0);
+            switch (input)
+            {
+                case 0:
+                    DisplayGameStart();
+                    break;
+            }
+
+        }
+        static void DisplayInventory()
+        {
+
+        }
+
+        // 입력을 받아서 정수(int) 범위 체크하기
+        // 올바른 범위 내의 값이 입력되어야 실행
+        static int CheckUserInput(int min,int max)
+        {
+            while (true) // 무한루프
+            {
+                // 입력을 받아서 저장하고 정수로 변환
+                // 변환에 성공 시 값을 저장하고 true
+                // 변환에 실패 시 값을 저장하지 않고 false
+
+                string input = Console.ReadLine();
+                bool parseSuccess = int.TryParse(input, out int ret);
+                if (parseSuccess) // parseSuccess 가 true 일 때 실행
+                {
+                    if (ret >= min && ret <= max)
+                    {
+                        return ret; // input = ret
+                    }
+                }
+                // parseSuccess 가 false 일 때가 아니라 
+                // if 에 들어가지 않았을 때
+                Console.WriteLine(" 잘못된 입력입니다. ");
+            }
+        }
+
         static void Main()
         {
-            
+            GameDataSetting();
+            DisplayGameStart();
         }
 
         
