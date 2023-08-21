@@ -20,7 +20,8 @@ namespace DungeonOfSparta
     public class Program
     {
         private static Character player;
-        private static List<Items> items;
+        private static List<WorldItems> items;
+        private static List<MyItems> myItems;
         public class Character
         {
             // 캐릭터 클래스, 필드 선언, 자동 프로퍼티
@@ -44,7 +45,7 @@ namespace DungeonOfSparta
                 Gold = gold;
             }
         }
-        public class Items
+        public class WorldItems
         {
             // 아이템 클래스 만들기
             public string Name { get; }       
@@ -54,7 +55,7 @@ namespace DungeonOfSparta
             public int Atk { get; }
             public int Def{ get; }
             
-            public Items
+            public WorldItems
             (string name, string type, string info, int price, int atk, int def)
             {
                 Name = name;
@@ -65,6 +66,15 @@ namespace DungeonOfSparta
                 Def = def;
             }
         }
+        public class MyItems : WorldItems
+        {
+            public bool Equipped { get; set; }
+            public MyItems(string name, string type, string info, int price, int atk, int def)
+        : base(name, type, info, price, atk, def)
+            {
+                Equipped = false;
+            }
+        }
         static void GameDataSetting()
         {
             // 캐릭터 정보 세팅
@@ -72,14 +82,16 @@ namespace DungeonOfSparta
 
 
             // 아이템 정보 세팅
-            items = new List<Items>();
-            items.Add(new Items("천 갑옷", "방어구", " 급소부위만 두텁게 한 수준으로 효과는 미미 ", 500, 0, 3));
-            items.Add(new Items("가죽 갑옷", "방어구", " 가볍지만 유연한 방어를 제공 ", 1000, 0, 5));
-            items.Add(new Items("사슬 갑옷", "방어구", " 기동성과 효과를 적절히 갖춘 보편적인 장비 ", 1500, 0, 10));
-            items.Add(new Items("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0));
-            items.Add(new Items("돌 검", "무기", " 단순하지만 위력적 ", 1000, 5, 0));
-            items.Add(new Items("철 검", "무기", " 충분한 공격력을 갖춘 보편적인 장비 ", 1500, 10, 0));
-            
+            items = new List<WorldItems>();
+            items.Add(new WorldItems("천 갑옷", "방어구", " 급소부위만 두텁게 한 수준으로 효과는 미미 ", 500, 0, 3));
+            items.Add(new WorldItems("가죽 갑옷", "방어구", " 가볍지만 유연한 방어를 제공 ", 1000, 0, 5));
+            items.Add(new WorldItems("사슬 갑옷", "방어구", " 기동성과 효과를 적절히 갖춘 보편적인 장비 ", 1500, 0, 10));
+            items.Add(new WorldItems("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0));
+            items.Add(new WorldItems("돌 검", "무기", " 단순하지만 위력적 ", 1000, 5, 0));
+            items.Add(new WorldItems("철 검", "무기", " 충분한 공격력을 갖춘 보편적인 장비 ", 1500, 10, 0));
+            myItems = new List<MyItems>();
+            myItems.Add(new MyItems("천 갑옷", "방어구", " 급소부위만 두텁게 한 수준으로 효과는 미미 ", 500, 0, 3));
+            myItems.Add(new MyItems("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0));
         }
 
         static void DisplayGameStart()
@@ -145,23 +157,22 @@ namespace DungeonOfSparta
         static void DisplayInventory()
         {
             // 인벤토리 창 만들기
-            // 보유한 아이템 설정 및 보여주기          
-            List<Items> myItems = new List<Items> ();
-            myItems.Add(items[0]);
-            myItems.Add(items[3]);
+            // 보유한 아이템만 보여주기 Myitems
             Console.Clear();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(" ~ 가방 ~ ");            
-            Console.ResetColor ();
+            Console.ResetColor();
             Console.WriteLine();
             Console.WriteLine(" 보유 중인 아이템을 관리할 수 있습니다. ");
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine(" [아이템 목록] ");
+            Console.ResetColor();
             Console.WriteLine();
             Console.WriteLine(" ~ 무기 ~ ");
             Console.WriteLine();
-            ItemsByType(myItems,"무기");
+            ItemsByType(myItems, "무기");
             Console.WriteLine();
             Console.WriteLine(" ~ 방어구 ~ ");
             Console.WriteLine();
@@ -184,21 +195,32 @@ namespace DungeonOfSparta
             }
         }
         static void DisplayEquipment()
-        { // 장착 관리 창
+        { 
+            // 장착 관리 창
             Console.Clear();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(" ~ 장착 관리 ~ ");
             Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine(" 0. 나가기 ");
+            Console.WriteLine();
+
+            // 장착 하는거 구현
+            int input = CheckUserInput(0, myItems.Count);
+            if (input == 0)
+            {
+                DisplayInventory(); 
+            }
         }
 
-        static void ItemsByType(List<Items> itemlist, string itemType)
+        static void ItemsByType(List<MyItems> itemlist, string itemType)
         {
-            foreach(Items item in itemlist)
+            foreach(MyItems item in itemlist)
             {
                 if (item.Type == itemType)
                 {
-                    Console.WriteLine($"{item.Name}/{item.Type}/{item.Info}/{item.Price}G");
+                    Console.WriteLine($" {item.Name} / {item.Type} / {item.Info} / {item.Price}G ");
                 }
             }
         }
