@@ -17,10 +17,10 @@ namespace DungeonOfSparta
     // 장착 중이지 않다면 장착하고 [E] 표시 추가
     // 장착 중이라면 [E] 표시 없애기
     
-    internal class Program
+    public class Program
     {
         private static Character player;
-        
+        private static List<Items> items;
         public class Character
         {
             // 캐릭터 클래스, 필드 선언, 자동 프로퍼티
@@ -72,13 +72,14 @@ namespace DungeonOfSparta
 
 
             // 아이템 정보 세팅
-            List<Items> items = new List<Items>();
-            items.Add(new Items("천 갑옷", "갑옷", " 급소부위만 두텁게 한 수준으로 효과는 미미 ", 500, 0, 3));
-            items.Add(new Items("가죽 갑옷", "갑옷", " 가볍지만 유연한 방어를 제공 ", 1000, 0, 5));
-            items.Add(new Items("사슬 갑옷", "갑옷", " 기동성과 효과를 적절히 갖춘 보편적인 장비 ", 1500, 0, 10));
+            items = new List<Items>();
+            items.Add(new Items("천 갑옷", "방어구", " 급소부위만 두텁게 한 수준으로 효과는 미미 ", 500, 0, 3));
+            items.Add(new Items("가죽 갑옷", "방어구", " 가볍지만 유연한 방어를 제공 ", 1000, 0, 5));
+            items.Add(new Items("사슬 갑옷", "방어구", " 기동성과 효과를 적절히 갖춘 보편적인 장비 ", 1500, 0, 10));
             items.Add(new Items("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0));
             items.Add(new Items("돌 검", "무기", " 단순하지만 위력적 ", 1000, 5, 0));
             items.Add(new Items("철 검", "무기", " 충분한 공격력을 갖춘 보편적인 장비 ", 1500, 10, 0));
+            
         }
 
         static void DisplayGameStart()
@@ -88,8 +89,8 @@ namespace DungeonOfSparta
             Console.WriteLine(" 스파르타 마을에 오신 여러분 환영합니다! ");
             Console.WriteLine(" 마을에서 할 수 있는 활동입니다. ");
             Console.WriteLine();
-            Console.WriteLine(" 1. 상태창 보기 ");
-            Console.WriteLine(" 2. 인벤토리 보기 ");
+            Console.WriteLine(" 1. 상태 보기 ");
+            Console.WriteLine(" 2. 가방 보기 ");
             Console.WriteLine();
             Console.WriteLine(" 원하시는 행동을 입력해주세요! ");
 
@@ -113,7 +114,7 @@ namespace DungeonOfSparta
             // 캐릭터 클래스의 정보를 가져오기
             Console.Clear();            
             Console.WriteLine();
-            Console.WriteLine(" ~ 상태창 ~ ");
+            Console.WriteLine(" ~ 상태 ~ ");
             Console.WriteLine(" 캐릭터의 정보를 표시합니다. ");
             Console.WriteLine();
             Console.WriteLine($" 이름 : {player.Name} ");
@@ -137,9 +138,47 @@ namespace DungeonOfSparta
         static void DisplayInventory()
         {
             // 인벤토리 창 만들기
+            // 보유한 아이템 설정 및 보여주기          
+            List<Items> myItems = new List<Items> ();
+            myItems.Add(items[0]);
+            myItems.Add(items[3]);
+            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine(" ~ 가방 ~ ");
+            Console.WriteLine();
+            Console.WriteLine(" 보유 중인 아이템을 관리할 수 있습니다. ");
+            Console.WriteLine();
+            Console.WriteLine(" [아이템 목록] ");
+            Console.WriteLine();
+            Console.WriteLine(" ~ 무기 ~ ");
+            Console.WriteLine();
+            ItemsByType(myItems,"무기");
+            Console.WriteLine();
+            Console.WriteLine(" ~ 방어구 ~ ");
+            Console.WriteLine();
+            ItemsByType(myItems, "방어구");
+            Console.WriteLine();     
+            Console.WriteLine(" 1. 장착 관리 ");
+            Console.WriteLine(" 0. 나가기 ");
+            Console.WriteLine();
+            Console.WriteLine(" 원하시는 행동을 입력해주세요! ");
 
         }
 
+        static void ItemsByType(List<Items> itemlist, string itemType)
+        {
+            foreach(Items item in itemlist)
+            {
+                if (item.Type == itemType)
+                {
+                    Console.WriteLine($"{item.Name}/{item.Type}/{item.Info}/{item.Price}G");
+                }
+            }
+        }
+        static void DisplayEquipment()
+        {
+            // 장비창 만들기
+        }
         // 입력을 받아서 정수(int) 범위 체크하기
         // 올바른 범위 내의 값이 입력되어야 실행
         static int CheckUserInput(int min,int max)
@@ -169,9 +208,6 @@ namespace DungeonOfSparta
         {
             GameDataSetting();
             DisplayGameStart();
-        }
-
-        
+        }        
     }
-    
 }
