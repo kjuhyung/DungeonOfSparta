@@ -20,7 +20,7 @@ namespace DungeonOfSparta
     public class Program
     {
         private static Character player;
-        private static List<WorldItems> items;
+        private static List<WorldItems> worldItems;
         private static List<MyItems> myItems;
         public class Character
         {
@@ -65,33 +65,40 @@ namespace DungeonOfSparta
                 Atk = atk;
                 Def = def;
             }
+            public static void ItemDataSetting()
+            {
+                worldItems = new List<WorldItems>();
+                worldItems.Add(new WorldItems("천 갑옷", "방어구", " 급소부위만 두텁게 한 수준으로 효과는 미미 ", 500, 0, 3));
+                worldItems.Add(new WorldItems("가죽 갑옷", "방어구", " 가볍지만 유연한 방어를 제공 ", 1000, 0, 5));
+                worldItems.Add(new WorldItems("사슬 갑옷", "방어구", " 기동성과 효과를 적절히 갖춘 보편적인 장비 ", 1500, 0, 10));
+                worldItems.Add(new WorldItems("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0));
+                worldItems.Add(new WorldItems("돌 검", "무기", " 단순하지만 위력적 ", 1000, 5, 0));
+                worldItems.Add(new WorldItems("철 검", "무기", " 충분한 공격력을 갖춘 보편적인 장비 ", 1500, 10, 0));
+            }
         }
         public class MyItems : WorldItems
         {
+            // 월드아이템 정보를 가져오기
+            // 보유하거나 장착하고 있으면 MyItems
+
             public bool Equipped { get; set; }
             public MyItems(string name, string type, string info, int price, int atk, int def)
         : base(name, type, info, price, atk, def)
             {
                 Equipped = false;
             }
+
         }
-        static void GameDataSetting()
+
+        static void PlayerSetting()
         {
             // 캐릭터 정보 세팅
             player = new Character("Leonidas","전사",1,10,5,100,1500);
-
-
             // 아이템 정보 세팅
-            items = new List<WorldItems>();
-            items.Add(new WorldItems("천 갑옷", "방어구", " 급소부위만 두텁게 한 수준으로 효과는 미미 ", 500, 0, 3));
-            items.Add(new WorldItems("가죽 갑옷", "방어구", " 가볍지만 유연한 방어를 제공 ", 1000, 0, 5));
-            items.Add(new WorldItems("사슬 갑옷", "방어구", " 기동성과 효과를 적절히 갖춘 보편적인 장비 ", 1500, 0, 10));
-            items.Add(new WorldItems("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0));
-            items.Add(new WorldItems("돌 검", "무기", " 단순하지만 위력적 ", 1000, 5, 0));
-            items.Add(new WorldItems("철 검", "무기", " 충분한 공격력을 갖춘 보편적인 장비 ", 1500, 10, 0));
             myItems = new List<MyItems>();
             myItems.Add(new MyItems("천 갑옷", "방어구", " 급소부위만 두텁게 한 수준으로 효과는 미미 ", 500, 0, 3));
             myItems.Add(new MyItems("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0));
+
         }
 
         static void DisplayGameStart()
@@ -252,7 +259,8 @@ namespace DungeonOfSparta
 
         static void Main()
         {
-            GameDataSetting();
+            WorldItems.ItemDataSetting();
+            PlayerSetting();           
             DisplayGameStart();
         }        
     }
