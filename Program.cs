@@ -69,12 +69,13 @@ namespace DungeonOfSparta
             public static void ItemDataSetting()
             {
                 worldItems = new List<WorldItems>();
-                worldItems.Add(new WorldItems("천 갑옷", "방어구", " 급소부위만 두텁게 한 수준으로 효과는 미미 ", 500, 0, 3));
-                worldItems.Add(new WorldItems("가죽 갑옷", "방어구", " 가볍지만 유연한 방어를 제공 ", 1000, 0, 5));
-                worldItems.Add(new WorldItems("사슬 갑옷", "방어구", " 기동성과 효과를 적절히 갖춘 보편적인 장비 ", 1500, 0, 10));
                 worldItems.Add(new WorldItems("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0));
                 worldItems.Add(new WorldItems("돌 검", "무기", " 단순하지만 위력적 ", 1000, 5, 0));
                 worldItems.Add(new WorldItems("철 검", "무기", " 충분한 공격력을 갖춘 보편적인 장비 ", 1500, 10, 0));
+                worldItems.Add(new WorldItems("천 갑옷", "방어구", " 급소부위만 두텁게 한 수준으로 효과는 미미 ", 500, 0, 3));
+                worldItems.Add(new WorldItems("가죽 갑옷", "방어구", " 가볍지만 유연한 방어를 제공 ", 1000, 0, 5));
+                worldItems.Add(new WorldItems("사슬 갑옷", "방어구", " 기동성과 효과를 적절히 갖춘 보편적인 장비 ", 1500, 0, 10));
+               
             }
         }
         public class MyItems : WorldItems
@@ -135,6 +136,9 @@ namespace DungeonOfSparta
 
         static void DisplayMyInfo()
         {
+            MyItems item;
+            string itemBonus;
+
             // 캐릭터 클래스의 정보를 가져오기
             Console.Clear();
             Console.WriteLine();
@@ -146,13 +150,13 @@ namespace DungeonOfSparta
             Console.WriteLine();
             Console.WriteLine($" 이름 : {player.Name} ");
             Console.WriteLine($" 직업 : {player.Job} ");
-            Console.WriteLine($" 레벨 : {player.Level} ");
-            Console.WriteLine($" 공격력 : {player.Atk} ");
+            Console.WriteLine($" 레벨 : {player.Level} ");            
+            Console.WriteLine($" 공격력 : {player.Atk} ");            
             Console.WriteLine($" 방어력 : {player.Def} ");
             Console.WriteLine($" 돈 : {player.Gold}G ");
             Console.WriteLine();
             Console.WriteLine(" 0. 나가기 ");
-
+            
             int input = CheckUserInput(0, 0);
             switch (input)
             {
@@ -219,11 +223,11 @@ namespace DungeonOfSparta
             Console.WriteLine();
             Console.WriteLine(" ~ 무기 ~ ");
             Console.WriteLine();
-            ItemsByType(myItems, "무기");
+            ItemEquip(myItems, "무기");
             Console.WriteLine();
             Console.WriteLine(" ~ 방어구 ~ ");
             Console.WriteLine();
-            ItemsByType(myItems, "방어구");
+            ItemEquip(myItems, "방어구");
             Console.WriteLine();
             // 번호 선택 
             Console.WriteLine(" 0. 나가기 ");
@@ -235,20 +239,40 @@ namespace DungeonOfSparta
             {
                 DisplayInventory();
             }
+            else
+            {
+                MyItems selectedItem = myItems[input - 1];
+                selectedItem.Equipped = !selectedItem.Equipped; // 장착/해제 토글
+                DisplayEquipment();
+            }
         }
-        
+        static void ItemEquip(List<MyItems> itemlist, string itemType)
+        {
+            for (int i = 0; i < itemlist.Count; i++)
+            {
+                MyItems item = itemlist[i];
+                if (item.Type == itemType)
+                {
+                    string equipMark = item.Equipped ? "[E] " : "    ";
+                    if (itemType == "무기")
+                        Console.WriteLine($" {i + 1}. {equipMark}{item.Name} / {item.Type} / 공격력 : {item.Atk}/ {item.Info} / {item.Price}G ");
+                    else if (itemType == "방어구")
+                        Console.WriteLine($" {i + 1}. {equipMark}{item.Name} / {item.Type} / 방어력 : {item.Def}/ {item.Info} / {item.Price}G ");
+                }
+            }
+        }
         static void ItemsByType(List<MyItems> itemlist, string itemType)
         {
             foreach(MyItems item in itemlist)
             {                
                 if (item.Type == itemType)
                 {
-                    if (itemType == "무기")
+                    if (itemType == "무기")                    
                     Console.WriteLine($" {item.Name} / {item.Type} / 공격력 : {item.Atk}/ {item.Info} / {item.Price}G ");
                     else if (itemType == "방어구")
                     Console.WriteLine($" {item.Name} / {item.Type} / 방어력 : {item.Def}/ {item.Info} / {item.Price}G ");
                 }
-            }
+            }            
         }
         
 
