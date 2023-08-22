@@ -1,6 +1,4 @@
 ﻿
-using System.Reflection.Metadata.Ecma335;
-
 namespace DungeonOfSparta
 {
     // 게임 시작 화면
@@ -79,17 +77,15 @@ namespace DungeonOfSparta
             player = new Character("Leonidas", "전사", 1, 10, 5, 100, 2500);
             // 아이템 정보 세팅
             myitems = new List<Items>();
-            myitems.Add(new Items("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0));
-            myitems.Add(new Items("천 갑옷", "방어구", " 천으로 만든 기본적인 갑옷 ", 500, 0, 3));
+            myitems.Add(new Items("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0) { IsHave = true });
+            myitems.Add(new Items("천 갑옷", "방어구", " 천으로 만든 기본적인 갑옷 ", 500, 0, 3) { IsHave = true });
 
 
             shopitems = new List<Items>();
-            shopitems.Add(new Items("돌 검", "무기", " 단순하지만 위력적 ", 1000, 5, 0));
-            shopitems.Add(new Items("철 검", "무기", " 충분한 공격력을 갖춘 보편적인 장비 ", 1500, 10, 0));
-            shopitems.Add(new Items("가죽 갑옷", "방어구", " 가볍지만 유연한 방어를 제공 ", 1000, 0, 5));
-            shopitems.Add(new Items("사슬 갑옷", "방어구", " 기동성과 효과를 적절히 갖춘 보편적인 장비 ", 1500, 0, 10));
-
-
+            shopitems.Add(new Items("돌 검", "무기", " 단순하지만 위력적 ", 1000, 5, 0) { IsHave = false });
+            shopitems.Add(new Items("철 검", "무기", " 충분한 공격력을 갖춘 보편적인 장비 ", 1500, 10, 0) { IsHave = false });
+            shopitems.Add(new Items("가죽 갑옷", "방어구", " 가볍지만 유연한 방어를 제공 ", 1000, 0, 5) { IsHave = false });
+            shopitems.Add(new Items("사슬 갑옷", "방어구", " 기동성과 효과를 적절히 갖춘 보편적인 장비 ", 1500, 0, 10) { IsHave = false }); 
         }
 
         static void DisplayGameStart()
@@ -134,7 +130,7 @@ namespace DungeonOfSparta
             string playerDef = player.Def.ToString();
             int bonusAtk = 0;
             int bonusDef = 0;
-
+             // 장착 여부에 따라 텍스트 표시
             for (int i = 0; i < myitems.Count; i++)
             {
                 if (myitems[i].IsEquipped)
@@ -196,6 +192,7 @@ namespace DungeonOfSparta
             Console.WriteLine(" [아이템 목록] ");
             Console.ResetColor();
             Console.WriteLine();
+            // 반복문으로 내 아이템 모두 출력
             for (int i = 0; i < myitems.Count; i++)
             {
                 Console.Write(" - ");
@@ -203,6 +200,7 @@ namespace DungeonOfSparta
             }
             Console.WriteLine();
             Console.WriteLine(" 1. 장착 관리 ");
+            Console.WriteLine();
             Console.WriteLine(" 0. 나가기 ");
             Console.WriteLine();
             Console.WriteLine(" 원하시는 행동을 입력해주세요! ");
@@ -237,17 +235,19 @@ namespace DungeonOfSparta
             Console.WriteLine(" [아이템 목록] ");
             Console.ResetColor();
             Console.WriteLine();
+            // 반복문으로 내 아이템 모두 출력
             for (int i = 0; i < myitems.Count; i++)
             {
                 Console.Write($" {i + 1}.");
                 ItemText(myitems[i]);
             }
             Console.WriteLine();
-
+            // 선택지 아이템 숫자만큼 출력
             for (int i = 1; i <= myitems.Count; i++)
             {
                 Console.WriteLine($" {i}. 장착/해제하기 ");
             }
+            Console.WriteLine();
             Console.WriteLine(" 0. 나가기 ");
             Console.WriteLine();
 
@@ -292,6 +292,7 @@ namespace DungeonOfSparta
             Console.WriteLine();
             Console.WriteLine(" 1. 구매하기 ");
             Console.WriteLine(" 2. 판매하기 ");
+            Console.WriteLine();
             Console.WriteLine(" 0. 나가기 ");
             Console.WriteLine();
             Console.WriteLine(" 원하시는 행동을 입력해주세요! ");
@@ -303,16 +304,18 @@ namespace DungeonOfSparta
                     DisplayGameStart();
                     break;
                 case 1:
-                    DisplaySell();
+                    // 구매하기
+                    DisplayBuy();
                     break;
                 case 2:
-                    //DisplayBuy();
+                    // 판매하기
+                    // DisplaySell();
                     break;
 
             }
         }
 
-        static void DisplaySell()
+        static void DisplayBuy(string msg = "")
         {            
             Console.Clear();
             Console.WriteLine();
@@ -340,32 +343,38 @@ namespace DungeonOfSparta
             {
                 Console.WriteLine($" {i}. 구매하기 ");
             }
+            Console.WriteLine();
             Console.WriteLine(" 0. 나가기 ");
             Console.WriteLine();
             Console.WriteLine(" 원하시는 행동을 입력해주세요! ");
-
-            int input = CheckUserInput(0, shopitems.Count);          
-
-            // 보유중인 아이템 구매불가
-            // 골드가 부족할때 로직 구현
-            // 보유중 하면서 샵아이템 -> 마이아이템리스트로
-            // 마이아이템은 ishave - true
-
+            if (!string.IsNullOrEmpty(msg))            
+                Console.WriteLine(msg); 
+            
+            int input = CheckUserInput(0, shopitems.Count);
+                
             if (input > 0 && input <= shopitems.Count)   
             {   
                 int itemIndex = input - 1;
                 Items choiceItems = shopitems[itemIndex];               
                
                 if (shopitems[itemIndex].Price <= player.Gold)
-                {
-                    choiceItems.IsHave = true;
-                    player.Gold -= shopitems[itemIndex].Price;
-                    DisplaySell();
+                {                    
+                    if(shopitems[itemIndex].IsHave == false)
+                    {
+                        choiceItems.IsHave = true;
+                        player.Gold -= shopitems[itemIndex].Price;
+                        myitems.Add(choiceItems);
+                        DisplayBuy($" {shopitems[itemIndex].Name} 을 구매하셨습니다. ");                        
+                    }
+                    else if (shopitems[itemIndex].IsHave == true)
+                    {
+                        DisplayBuy(" 보유중인 아이템입니다. ");
+                    }
+                    DisplayBuy();
                 }
                 else if (shopitems[itemIndex].Price > player.Gold)
                 {
-                    Console.WriteLine(" Gold 가 부족합니다. ");
-                    Console.WriteLine(" 다른 번호를 입력하세요. ");                    
+                    DisplayBuy(" Gold 가 부족합니다. ");
                 }
             }
             else if (input == 0)
