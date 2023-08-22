@@ -1,5 +1,4 @@
-﻿
-using static DungeonOfSparta.Program;
+﻿using System.Reflection.Metadata.Ecma335;
 
 namespace DungeonOfSparta
 {
@@ -22,7 +21,7 @@ namespace DungeonOfSparta
     internal class Program
     {
         private static Character player;
-        private static List<Items> items; 
+        private static List<Items> items;
 
         public class Character
         {
@@ -231,38 +230,25 @@ namespace DungeonOfSparta
                 ItemText(items[i]);
             } 
             Console.WriteLine();
-            Console.WriteLine(" 1. 장착/해제하기 ");
-            Console.WriteLine(" 2. 장착/해제하기 ");
+            
+            for (int i= 1; i <= items.Count; i++)
+            {
+                Console.WriteLine($" {i}. 장착/해제하기 ");
+            }
+            //Console.WriteLine(" 1. 장착/해제하기 ");
+            //Console.WriteLine(" 2. 장착/해제하기 ");
             Console.WriteLine(" 0. 나가기 ");
             Console.WriteLine();
 
             // 번호를 선택해서 장착하기
             int input = CheckUserInput(0, items.Count);
-            if (input == 1)
+            if (input > 0 && input <=items.Count)
             {
-                if (!items[0].IsEquipped)
-                {
-                    items[0].IsEquipped = true;                    
-                    DisplayEquipment();
-                }
-                else
-                {
-                    items[0].IsEquipped = false;
-                    DisplayEquipment();
-                }
-            }
-            if (input == 2)
-            {
-                if (!items[1].IsEquipped)
-                {
-                    items[1].IsEquipped = true;
-                    DisplayEquipment();
-                }
-                else
-                {
-                    items[1].IsEquipped = false;
-                    DisplayEquipment();
-                }                
+                int itemIndex = input - 1;
+                Items selectedItems = items[itemIndex];
+
+                selectedItems.IsEquipped = !selectedItems.IsEquipped;
+                DisplayEquipment();
             }
             else if (input == 0)
             {
