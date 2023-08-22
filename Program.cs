@@ -78,12 +78,11 @@ namespace DungeonOfSparta
             // 아이템 정보 세팅
             items = new List<Items>();
             items.Add(new Items("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0));
-            //items.Add(new Items("돌 검", "무기", " 단순하지만 위력적 ", 1000, 5, 0));
+            // items.Add(new Items("돌 검", "무기", " 단순하지만 위력적 ", 1000, 5, 0));
             // items.Add(new Items("철 검", "무기", " 충분한 공격력을 갖춘 보편적인 장비 ", 1500, 10, 0));
             items.Add(new Items("천 갑옷", "방어구", " 천으로 만든 기본적인 갑옷 ", 500, 0, 3));
-            //items.Add(new Items("가죽 갑옷", "방어구", " 가볍지만 유연한 방어를 제공 ", 1000, 0, 5));
+            // items.Add(new Items("가죽 갑옷", "방어구", " 가볍지만 유연한 방어를 제공 ", 1000, 0, 5));
             // items.Add(new Items("사슬 갑옷", "방어구", " 기동성과 효과를 적절히 갖춘 보편적인 장비 ", 1500, 0, 10));
-
         }
 
         static void DisplayGameStart()
@@ -119,6 +118,29 @@ namespace DungeonOfSparta
 
         static void DisplayMyInfo()
         {
+            string playerAtk = player.Atk.ToString();
+            string playerDef = player.Def.ToString();
+            int bonusAtk= 0;
+            int bonusDef= 0;
+
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (items[i].IsEquipped)
+                {
+                    if (items[i].Type == "무기")
+                    {
+                        bonusAtk += items[i].Atk;
+                        playerAtk += ($" (+{bonusAtk})");
+                    }
+
+                    else if (items[i].Type == "방어구")
+                    {
+                        bonusDef += items[i].Def;
+                        playerDef += ($" (+{bonusDef})");
+                    }
+                }
+            }
             // 캐릭터 클래스의 정보를 가져오기
             Console.Clear();
             Console.WriteLine();
@@ -130,9 +152,11 @@ namespace DungeonOfSparta
             Console.WriteLine();
             Console.WriteLine($" 이름 : {player.Name} ");
             Console.WriteLine($" 직업 : {player.Job} ");
-            Console.WriteLine($" 레벨 : {player.Level} ");            
-            Console.WriteLine($" 공격력 : {player.Atk} ");            
-            Console.WriteLine($" 방어력 : {player.Def} ");
+            Console.WriteLine($" 레벨 : {player.Level} ");              
+            Console.Write($" 공격력 : {playerAtk} ");
+            Console.WriteLine();
+            Console.Write($" 방어력 : {playerDef} ");                  
+            Console.WriteLine();
             Console.WriteLine($" 돈 : {player.Gold}G ");
             Console.WriteLine();
             Console.WriteLine(" 0. 나가기 ");
@@ -238,8 +262,7 @@ namespace DungeonOfSparta
                 {
                     items[1].IsEquipped = false;
                     DisplayEquipment();
-                }
-                
+                }                
             }
             else if (input == 0)
             {
