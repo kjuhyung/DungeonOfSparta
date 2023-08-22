@@ -1,4 +1,6 @@
 ﻿
+using static DungeonOfSparta.Program;
+
 namespace DungeonOfSparta
 {
     // 게임 시작 화면
@@ -76,10 +78,10 @@ namespace DungeonOfSparta
             // 아이템 정보 세팅
             items = new List<Items>();
             items.Add(new Items("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0));
-            // items.Add(new Items("돌 검", "무기", " 단순하지만 위력적 ", 1000, 5, 0));
+            //items.Add(new Items("돌 검", "무기", " 단순하지만 위력적 ", 1000, 5, 0));
             // items.Add(new Items("철 검", "무기", " 충분한 공격력을 갖춘 보편적인 장비 ", 1500, 10, 0));
-            items.Add(new Items("천 갑옷", "방어구", " 급소부위만 두텁게 한 수준으로 효과는 미미 ", 500, 0, 3));
-            // items.Add(new Items("가죽 갑옷", "방어구", " 가볍지만 유연한 방어를 제공 ", 1000, 0, 5));
+            items.Add(new Items("천 갑옷", "방어구", " 천으로 만든 기본적인 갑옷 ", 500, 0, 3));
+            //items.Add(new Items("가죽 갑옷", "방어구", " 가볍지만 유연한 방어를 제공 ", 1000, 0, 5));
             // items.Add(new Items("사슬 갑옷", "방어구", " 기동성과 효과를 적절히 갖춘 보편적인 장비 ", 1500, 0, 10));
 
         }
@@ -156,10 +158,14 @@ namespace DungeonOfSparta
             Console.WriteLine(" 보유 중인 아이템을 관리할 수 있습니다. ");
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.WriteLine(" [아이템 목록] ");
+            Console.WriteLine(" [아이템 목록] ");            
             Console.ResetColor();
             Console.WriteLine();
-            // 아이템 목록 나오게하기
+            for (int i = 0; i<items.Count; i++)
+            {
+                Console.Write(" - ");
+                ItemText(items[i]);
+            }           
             Console.WriteLine();
             Console.WriteLine(" 1. 장착 관리 ");
             Console.WriteLine(" 0. 나가기 ");
@@ -178,8 +184,11 @@ namespace DungeonOfSparta
             }
         }
         static void DisplayEquipment()
-        {
+        {            
             // 장착 관리 창
+            // 아이템 목록 나오게하기
+            // 1. 장착관리 창에서는 번호가 붙음
+            // 2. 번호를 입력 , 장착 중이지 않다면 장착하고 [E], 장착 중이라면 해제하고 [E] 삭제
             Console.Clear();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -192,39 +201,86 @@ namespace DungeonOfSparta
             Console.WriteLine(" [아이템 목록] ");
             Console.ResetColor();
             Console.WriteLine();
-            // 아이템 목록 나오게하기
-            // 1. 장착관리 창에서는 번호가 붙음
-            // 2. 번호를 입력 , 장착 중이지 않다면 장착하고 [E], 장착 중이라면 해제하고 [E] 삭제
-
+            for (int i = 0; i < items.Count; i++)
+            {
+                Console.Write($" {i + 1}.");
+                ItemText(items[i]);
+            } 
             Console.WriteLine();
-            // 번호 선택 
+            Console.WriteLine(" 1. 장착/해제하기 ");
+            Console.WriteLine(" 2. 장착/해제하기 ");
             Console.WriteLine(" 0. 나가기 ");
             Console.WriteLine();
 
-            // 장착 하는거 구현
+            // 번호를 선택해서 장착하기
             int input = CheckUserInput(0, items.Count);
-            if (input == 0)
+            if (input == 1)
+            {
+                if (!items[0].IsEquipped)
+                {
+                    items[0].IsEquipped = true;
+                    DisplayEquipment();
+                }
+                else
+                {
+                    items[0].IsEquipped = false;
+                    DisplayEquipment();
+                }
+            }
+            if (input == 2)
+            {
+                if (!items[1].IsEquipped)
+                {
+                    items[1].IsEquipped = true;
+                    DisplayEquipment();
+                }
+                else
+                {
+                    items[1].IsEquipped = false;
+                    DisplayEquipment();
+                }
+                
+            }
+            else if (input == 0)
             {
                 DisplayInventory();
-            }
-            else 
-            {
-
             }
         }        
 
         // 1. 아이템 정보 출력
-        // 
-        static void ItemText()
+        static void ItemText(Items item)
         {
-            
+            if (item.Type == "무기")
+            {
+                if (item.IsEquipped)
+                {
+                    Console.Write(" [E] ");
+                    Console.WriteLine($"{item.Name}\t | 공격력 : {item.Atk}\t |{item.Info}\t | {item.Price}G");
+                }
+                else if (!item.IsEquipped)
+                {
+                    Console.WriteLine($"{item.Name}\t | 공격력 : {item.Atk}\t |{item.Info}\t | {item.Price}G");
+                }
+            }
+
+            else if (item.Type == "방어구")
+            {
+                if (item.IsEquipped)
+                {
+                    Console.Write(" [E] ");
+                    Console.WriteLine($"{item.Name}\t | 방어력 : {item.Def}\t |{item.Info}\t | {item.Price}G");
+                }
+                else if(!item.IsEquipped)
+                {
+                    Console.WriteLine($"{item.Name}\t | 방어력 : {item.Def}\t |{item.Info}\t | {item.Price}G");
+                }                  
+            }                  
         }
         
 
-        // 입력을 받아서 정수(int) 범위 체크하기
-        // 올바른 범위 내의 값이 입력되어야 실행
+        
         static int CheckUserInput(int min,int max)
-        {
+        {            
             while (true) // 무한루프
             {
                 // 입력을 받아서 저장하고 정수로 변환
@@ -235,6 +291,8 @@ namespace DungeonOfSparta
                 bool parseSuccess = int.TryParse(input, out int ret);
                 if (parseSuccess) 
                 {
+                    // 입력을 받아서 정수(int) 범위 체크하기
+                    // 올바른 범위 내의 값이 입력되어야 실행
                     if (ret >= min && ret <= max)
                     {
                         return ret; // input = ret
