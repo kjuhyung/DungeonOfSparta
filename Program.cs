@@ -1,4 +1,6 @@
 ﻿
+using System.Reflection.Metadata.Ecma335;
+
 namespace DungeonOfSparta
 {
     // 게임 시작 화면
@@ -74,7 +76,7 @@ namespace DungeonOfSparta
         static void GameSetting()
         {
             // 캐릭터 정보 세팅
-            player = new Character("Leonidas", "전사", 1, 10, 5, 100, 1500);
+            player = new Character("Leonidas", "전사", 1, 10, 5, 100, 2500);
             // 아이템 정보 세팅
             myitems = new List<Items>();
             myitems.Add(new Items("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0));
@@ -304,7 +306,7 @@ namespace DungeonOfSparta
                     DisplaySell();
                     break;
                 case 2:
-                    // DisplayBuy();
+                    //DisplayBuy();
                     break;
 
             }
@@ -342,31 +344,37 @@ namespace DungeonOfSparta
             Console.WriteLine();
             Console.WriteLine(" 원하시는 행동을 입력해주세요! ");
 
-            int input = CheckUserInput(0, shopitems.Count);
-            // 아이템가격 -> 보유중 텍스트 변경
-            // shopItems -> myItems 로 리스트 변경
-            // haveitem true
+            int input = CheckUserInput(0, shopitems.Count);          
 
-            if (input > 0 && input <= shopitems.Count)
-            {                
+            // 보유중인 아이템 구매불가
+            // 골드가 부족할때 로직 구현
+            // 보유중 하면서 샵아이템 -> 마이아이템리스트로
+            // 마이아이템은 ishave - true
+
+            if (input > 0 && input <= shopitems.Count)   
+            {   
                 int itemIndex = input - 1;
-                Items choiceItems = shopitems[itemIndex];
-                
-                choiceItems.IsHave = true;
-                player.Gold -= shopitems[itemIndex].Price;
-                DisplaySell();
+                Items choiceItems = shopitems[itemIndex];               
+               
+                if (shopitems[itemIndex].Price <= player.Gold)
+                {
+                    choiceItems.IsHave = true;
+                    player.Gold -= shopitems[itemIndex].Price;
+                    DisplaySell();
+                }
+                else if (shopitems[itemIndex].Price > player.Gold)
+                {
+                    Console.WriteLine(" Gold 가 부족합니다. ");
+                    Console.WriteLine(" 다른 번호를 입력하세요. ");                    
+                }
             }
             else if (input == 0)
             {
-                DisplayInventory();
+                DisplayShop();
             }
-
         }
 
-
-
-        // 1. 아이템 정보 출력
-        static void ItemText(Items item)
+        static void ItemText(Items item) // 아이템 정보 출력 함수
         {
             string isHave = item.IsHave ? "보유중" : $"{item.Price.ToString()}G";
             string typeText = (item.Type == "무기") ? "공격력" : "방어력";
