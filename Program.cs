@@ -130,24 +130,24 @@ namespace DungeonOfSparta
             string playerDef = player.Def.ToString();
             int bonusAtk = 0;
             int bonusDef = 0;
-             // 장착 여부에 따라 텍스트 표시
+            // 장착된 장비 정보 상태창 표시
             for (int i = 0; i < myitems.Count; i++)
             {
                 if (myitems[i].IsEquipped)
                 {
-                    if (myitems[i].Type == "무기")
-                    {
-                        bonusAtk += myitems[i].Atk;
-                        playerAtk += ($" (+{bonusAtk})");
-                    }
-
-                    else if (myitems[i].Type == "방어구")
-                    {
-                        bonusDef += myitems[i].Def;
-                        playerDef += ($" (+{bonusDef})");
-                    }
+                    bonusAtk += myitems[i].Atk;
+                    bonusDef += myitems[i].Def;
                 }
             }
+            if (bonusAtk != 0)
+            {                
+                playerAtk += ($" (+{bonusAtk})");
+            }            
+            if (bonusDef != 0)
+            {
+                playerDef += ($" (+{bonusDef})");
+            }
+            
             // 캐릭터 클래스의 정보를 가져오기
             Console.Clear();
             Console.WriteLine();
@@ -196,7 +196,7 @@ namespace DungeonOfSparta
             for (int i = 0; i < myitems.Count; i++)
             {
                 Console.Write(" - ");
-                ItemText(myitems[i]);
+                ItemText(myitems[i], false);
             }
             Console.WriteLine();
             Console.WriteLine(" 1. 장착 관리 ");
@@ -239,7 +239,7 @@ namespace DungeonOfSparta
             for (int i = 0; i < myitems.Count; i++)
             {
                 Console.Write($" {i + 1}.");
-                ItemText(myitems[i]);
+                ItemText(myitems[i], false);
             }
             Console.WriteLine();
             // 선택지 아이템 숫자만큼 출력
@@ -287,7 +287,7 @@ namespace DungeonOfSparta
             for (int i = 0; i < shopitems.Count; i++)
             {
                 Console.Write(" - ");
-                ItemText(shopitems[i]);
+                ItemText(shopitems[i],true);
             }
             Console.WriteLine();
             Console.WriteLine(" 1. 구매하기 ");
@@ -336,7 +336,7 @@ namespace DungeonOfSparta
             for (int i = 0; i < shopitems.Count; i++)
             {               
                     Console.Write($" {i + 1}.");
-                    ItemText(shopitems[i]);                
+                    ItemText(shopitems[i],true);                
             }
             Console.WriteLine(); 
             for (int i = 1; i <= shopitems.Count; i++)
@@ -370,7 +370,7 @@ namespace DungeonOfSparta
                     {
                         DisplayBuy(" 보유중인 아이템입니다. ");
                     }
-                    DisplayBuy();
+                    // DisplayBuy();
                 }
                 else if (shopitems[itemIndex].Price > player.Gold)
                 {
@@ -383,13 +383,16 @@ namespace DungeonOfSparta
             }
         }
 
-        static void ItemText(Items item) // 아이템 정보 출력 함수
+        static void ItemText(Items item, bool isShop) // 아이템 정보 출력 함수
         {
             string isHave = item.IsHave ? "보유중" : $"{item.Price.ToString()}G";
             string typeText = (item.Type == "무기") ? "공격력" : "방어력";
             int statValue = (item.Type == "무기") ? item.Atk : item.Def;
-
-            string equippedMark = item.IsEquipped ? "[E] " : " ";
+            string equippedMark = "   ";
+            if (!isShop)
+            {
+                equippedMark = item.IsEquipped ? "[E]" : "   ";
+            }            
             string iteminfomation = $"{equippedMark}{item.Name} | {typeText} : {statValue} | {item.Info} | {isHave}";
             Console.WriteLine(iteminfomation);
         }      
