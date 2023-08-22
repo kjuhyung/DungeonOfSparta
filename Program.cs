@@ -71,7 +71,7 @@ namespace DungeonOfSparta
             }                                      
         }
         
-        static void PlayerSetting()
+        static void GameSetting()
         {
             // 캐릭터 정보 세팅
             player = new Character("Leonidas", "전사", 1, 10, 5, 100, 1500);
@@ -242,7 +242,7 @@ namespace DungeonOfSparta
             {
                 if (!items[0].IsEquipped)
                 {
-                    items[0].IsEquipped = true;
+                    items[0].IsEquipped = true;                    
                     DisplayEquipment();
                 }
                 else
@@ -327,7 +327,7 @@ namespace DungeonOfSparta
 
         static void Main()
         {
-            PlayerSetting();           
+            GameSetting();           
             DisplayGameStart();
         }        
     }
