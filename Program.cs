@@ -75,11 +75,12 @@ namespace DungeonOfSparta
         {
             // 캐릭터 정보 세팅
             player = new Character("Leonidas", "전사", 1, 10, 5, 100, 2500);
+
             // 아이템 정보 세팅
+            
             myitems = new List<Items>();
             myitems.Add(new Items("나무 검", "무기", " 검의 형상으로 깎은 나무... ", 500, 3, 0) { IsHave = true });
             myitems.Add(new Items("천 갑옷", "방어구", " 천으로 만든 기본적인 갑옷 ", 500, 0, 3) { IsHave = true });
-
 
             shopitems = new List<Items>();
             shopitems.Add(new Items("돌 검", "무기", " 단순하지만 위력적 ", 1000, 5, 0) { IsHave = false });
@@ -242,7 +243,7 @@ namespace DungeonOfSparta
                 ItemText(myitems[i], false);
             }
             Console.WriteLine();
-            // 선택지 아이템 숫자만큼 출력
+            // 선택지를 아이템 숫자만큼 출력
             for (int i = 1; i <= myitems.Count; i++)
             {
                 Console.WriteLine($" {i}. 장착/해제하기 ");
@@ -256,9 +257,9 @@ namespace DungeonOfSparta
             if (input > 0 && input <= myitems.Count)
             {
                 int itemIndex = input - 1;
-                Items selectedItems = myitems[itemIndex];
+                Items choicedItem = myitems[itemIndex];
 
-                selectedItems.IsEquipped = !selectedItems.IsEquipped;
+                choicedItem.IsEquipped = !choicedItem.IsEquipped;
                 DisplayEquipment();
             }
             else if (input == 0)
@@ -287,7 +288,7 @@ namespace DungeonOfSparta
             for (int i = 0; i < shopitems.Count; i++)
             {
                 Console.Write(" - ");
-                ItemText(shopitems[i],true);
+                ItemText(shopitems[i], false);
             }
             Console.WriteLine();
             Console.WriteLine(" 1. 구매하기 ");
@@ -309,7 +310,7 @@ namespace DungeonOfSparta
                     break;
                 case 2:
                     // 판매하기
-                    // DisplaySell();
+                    DisplaySell();
                     break;
 
             }
@@ -336,7 +337,7 @@ namespace DungeonOfSparta
             for (int i = 0; i < shopitems.Count; i++)
             {               
                     Console.Write($" {i + 1}.");
-                    ItemText(shopitems[i],true);                
+                    ItemText(shopitems[i], false);                
             }
             Console.WriteLine(); 
             for (int i = 1; i <= shopitems.Count; i++)
@@ -355,24 +356,24 @@ namespace DungeonOfSparta
             if (input > 0 && input <= shopitems.Count)   
             {   
                 int itemIndex = input - 1;
-                Items choiceItems = shopitems[itemIndex];               
+                Items choicedItem = shopitems[itemIndex];               
                
-                if (shopitems[itemIndex].Price <= player.Gold)
+                if (choicedItem.Price <= player.Gold)
                 {                    
-                    if(shopitems[itemIndex].IsHave == false)
+                    if(choicedItem.IsHave == false)
                     {
-                        choiceItems.IsHave = true;
-                        player.Gold -= shopitems[itemIndex].Price;
-                        myitems.Add(choiceItems);
-                        DisplayBuy($" {shopitems[itemIndex].Name} 을 구매하셨습니다. ");                        
+                        choicedItem.IsHave = true;
+                        player.Gold -= choicedItem.Price;
+                        myitems.Add(choicedItem);
+                        DisplayBuy($" {choicedItem.Name} 을 구매하셨습니다. ");                        
                     }
-                    else if (shopitems[itemIndex].IsHave == true)
+                    else if (choicedItem.IsHave == true)
                     {
                         DisplayBuy(" 보유중인 아이템입니다. ");
                     }
                     // DisplayBuy();
                 }
-                else if (shopitems[itemIndex].Price > player.Gold)
+                else if (choicedItem.Price > player.Gold)
                 {
                     DisplayBuy(" Gold 가 부족합니다. ");
                 }
@@ -382,19 +383,82 @@ namespace DungeonOfSparta
                 DisplayShop();
             }
         }
-
-        static void ItemText(Items item, bool isShop) // 아이템 정보 출력 함수
+        static void DisplaySell(string msg = "")
         {
-            string isHave = item.IsHave ? "보유중" : $"{item.Price.ToString()}G";
-            string typeText = (item.Type == "무기") ? "공격력" : "방어력";
-            int statValue = (item.Type == "무기") ? item.Atk : item.Def;
-            string equippedMark = "   ";
-            if (!isShop)
+            Console.Clear();
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(" ~ 상점 ~ ");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine(" 아이템을 판매할 수 있습니다. ");
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine($" [보유 골드] \t{player.Gold} G ");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine(" [아이템 목록] ");
+            Console.ResetColor();
+            Console.WriteLine();
+            for (int i = 0; i < myitems.Count; i++)
             {
-                equippedMark = item.IsEquipped ? "[E]" : "   ";
-            }            
-            string iteminfomation = $"{equippedMark}{item.Name} | {typeText} : {statValue} | {item.Info} | {isHave}";
-            Console.WriteLine(iteminfomation);
+                Console.Write($" {i + 1}.");
+                ItemText(myitems[i], true);
+            }
+            Console.WriteLine();
+            for (int i = 1; i <= myitems.Count; i++)
+            {
+                Console.WriteLine($" {i}. 판매하기 ");
+            }
+            Console.WriteLine();
+            Console.WriteLine(" 0. 나가기 ");
+            Console.WriteLine();
+            Console.WriteLine(" 원하시는 행동을 입력해주세요! ");
+            if (!string.IsNullOrEmpty(msg))
+                Console.WriteLine(msg);
+
+            int input = CheckUserInput(0, myitems.Count);
+
+            if (input > 0 && input <= myitems.Count)
+            {
+                int itemIndex = input - 1;
+                Items choicedItems = myitems[itemIndex];  
+                if (choicedItems.IsEquipped)
+                {
+                    choicedItems.IsEquipped = false;
+                }
+                choicedItems.IsHave = false;
+                player.Gold += choicedItems.Price;
+                myitems.Remove(choicedItems);
+                
+              DisplaySell
+              ($" {choicedItems.Name} 을 판매하셨습니다. \n {choicedItems.Price *0.85} G 를 얻었습니다.");
+            }
+            else if (input == 0)
+            {
+                DisplayShop();
+            }
+        }
+
+        static void ItemText(Items item, bool isSell) // 아이템 정보 출력 함수
+        {
+            string isHave = item.IsHave ? "보유중" : $"{item.Price} G";
+            string typeText = item.Type == "무기" ? "공격력" : "방어력";
+            int statValue = item.Type == "무기" ? item.Atk : item.Def;
+            string equippedMark = item.IsEquipped ? "[E]" : "   ";
+            if (isSell)
+            {
+                double SellPrice = item.Price * 0.85;
+                string sellitemInfo = $"{equippedMark}{item.Name} | {typeText} : {statValue} | {item.Info} | {SellPrice}";
+                Console.WriteLine(sellitemInfo);
+            }
+            else
+            {
+                string itemInfomation = $"{equippedMark}{item.Name} | {typeText} : {statValue} | {item.Info} | {isHave}";
+                Console.WriteLine(itemInfomation);
+            }
+            
         }      
         static int CheckUserInput(int min,int max)
         {            
