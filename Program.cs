@@ -1,22 +1,6 @@
 ﻿
 namespace DungeonOfSparta
-{
-    // 게임 시작 화면
-    // 게임 시작시 간단한 소개, 마을에서 할 수 있는 행동
-
-    // 상태 보기
-    // 캐릭터의 정보를 표시
-    // 7개의 속성 레벨,이름,직업,공격력,방어력,체력,돈
-
-    // 인벤토리
-    // 보유 중인 아이템을 전부 보여준다.
-    // 장착중인 아이템 앞에는 [E] 표시가 붙는다
-
-    // 장착 관리
-    // 아이템 목록 앞에 숫자가 표시
-    // 장착 중이지 않다면 장착하고 [E] 표시 추가
-    // 장착 중이라면 [E] 표시 없애기
-
+{ 
     internal class Program
     {
         private static Character player;
@@ -91,6 +75,8 @@ namespace DungeonOfSparta
 
         static void DisplayGameStart()
         {
+            // 게임 시작 화면
+            // 게임 시작시 간단한 소개, 마을에서 할 수 있는 행동
             Console.Clear();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Red;
@@ -127,11 +113,15 @@ namespace DungeonOfSparta
 
         static void DisplayMyInfo()
         {
+
+            // 상태 보기
+            // 캐릭터의 정보를 표시
+            // 7개의 속성 레벨,이름,직업,공격력,방어력,체력,돈
             string playerAtk = player.Atk.ToString();
             string playerDef = player.Def.ToString();
             int bonusAtk = 0;
             int bonusDef = 0;
-            // 장착된 장비 정보 상태창 표시
+            // 장착된 장비의 추가 공격력,방어력 표시
             for (int i = 0; i < myitems.Count; i++)
             {
                 if (myitems[i].IsEquipped)
@@ -180,7 +170,9 @@ namespace DungeonOfSparta
         }
         static void DisplayInventory()
         {
-            // 인벤토리 창 만들기
+            // 인벤토리
+            // 보유 중인 아이템을 전부 보여준다.
+            // 장착중인 아이템 앞에는 [E] 표시가 붙는다
             Console.Clear();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -252,7 +244,7 @@ namespace DungeonOfSparta
             Console.WriteLine(" 0. 나가기 ");
             Console.WriteLine();
 
-            // 번호를 선택해서 장착하기
+            // 번호를 입력해서 장착/해제하기
             int input = CheckUserInput(0, myitems.Count);
             if (input > 0 && input <= myitems.Count)
             {
@@ -269,6 +261,7 @@ namespace DungeonOfSparta
         }
         static void DisplayShop()
         {
+            // 상점 아이템 목록을 표시
             Console.Clear();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -298,6 +291,7 @@ namespace DungeonOfSparta
             Console.WriteLine();
             Console.WriteLine(" 원하시는 행동을 입력해주세요! ");
 
+            // 번호를 입력해서 구매/판매 이동하기
             int input = CheckUserInput(0, 2);
             switch (input)
             {
@@ -317,7 +311,8 @@ namespace DungeonOfSparta
         }
 
         static void DisplayBuy(string msg = "")
-        {            
+        {   
+            // 구매하기
             Console.Clear();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -334,6 +329,7 @@ namespace DungeonOfSparta
             Console.WriteLine(" [아이템 목록] ");
             Console.ResetColor();
             Console.WriteLine();
+            // 상점의 아이템 목록과 선택지 표시
             for (int i = 0; i < shopitems.Count; i++)
             {               
                     Console.Write($" {i + 1}.");
@@ -351,6 +347,9 @@ namespace DungeonOfSparta
             if (!string.IsNullOrEmpty(msg))            
                 Console.WriteLine(msg); 
             
+            // 번호를 입력해서 구매 시도
+            // 골드 상황에 따라 다른 출력
+            // 구매 성공시 골드변경,아이템리스트 추가
             int input = CheckUserInput(0, shopitems.Count);
                 
             if (input > 0 && input <= shopitems.Count)   
@@ -385,6 +384,7 @@ namespace DungeonOfSparta
         }
         static void DisplaySell(string msg = "")
         {
+            // 판매하기
             Console.Clear();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -401,6 +401,7 @@ namespace DungeonOfSparta
             Console.WriteLine(" [아이템 목록] ");
             Console.ResetColor();
             Console.WriteLine();
+            // 내 아이템 목록과 선택지 표시
             for (int i = 0; i < myitems.Count; i++)
             {
                 Console.Write($" {i + 1}.");
@@ -417,8 +418,12 @@ namespace DungeonOfSparta
             Console.WriteLine(" 원하시는 행동을 입력해주세요! ");           
             Console.WriteLine(msg);
 
+            // 번호를 입력해서 판매
+            // 판매가격은 아이템가격의 85%
+            // 판매 시 텍스트 출력
+            // 리스트 삭제 및 골드 추가
             int input = CheckUserInput(0, myitems.Count);
-
+           
             if (input > 0 && input <= myitems.Count)
             {
                 int itemIndex = input - 1;
@@ -440,8 +445,12 @@ namespace DungeonOfSparta
             }
         }
 
-        static void ItemText(Items item, bool isSell) // 아이템 정보 출력 함수
+        static void ItemText(Items item, bool isSell) 
         {
+            // 아이템 정보를 출력하는 함수
+            // 판매창에서만 가격이 변동
+            // 장착 여부 표시
+            // 아이템 타입에 따라 공격력 또는 방어력 표시
             string isHave = item.IsHave ? "보유중" : $"{item.Price} G";
             string typeText = item.Type == "무기" ? "공격력" : "방어력";
             int statValue = item.Type == "무기" ? item.Atk : item.Def;
@@ -449,7 +458,7 @@ namespace DungeonOfSparta
             if (isSell)
             {
                 double SellPrice = item.Price * 0.85;
-                string sellitemInfo = $"{equippedMark}{item.Name} | {typeText} : {statValue} | {item.Info} | {SellPrice}";
+                string sellitemInfo = $"{equippedMark}{item.Name} | {typeText} : {statValue} | {item.Info} | {SellPrice} G";
                 Console.WriteLine(sellitemInfo);
             }
             else
