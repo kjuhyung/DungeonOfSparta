@@ -414,9 +414,8 @@ namespace DungeonOfSparta
             Console.WriteLine();
             Console.WriteLine(" 0. 나가기 ");
             Console.WriteLine();
-            Console.WriteLine(" 원하시는 행동을 입력해주세요! ");
-            if (!string.IsNullOrEmpty(msg))
-                Console.WriteLine(msg);
+            Console.WriteLine(" 원하시는 행동을 입력해주세요! ");           
+            Console.WriteLine(msg);
 
             int input = CheckUserInput(0, myitems.Count);
 
@@ -429,7 +428,7 @@ namespace DungeonOfSparta
                     choicedItems.IsEquipped = false;
                 }
                 choicedItems.IsHave = false;
-                player.Gold += choicedItems.Price;
+                player.Gold += (int)(choicedItems.Price*0.85);
                 myitems.Remove(choicedItems);
                 
               DisplaySell
